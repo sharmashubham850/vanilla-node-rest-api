@@ -33,9 +33,19 @@ function update(id, product) {
     })
 }
 
+function remove(id) {
+    return new Promise((resolve, reject) => {
+        const index = products.findIndex(p => p.id === id);
+        products.splice(index, 1);
+        writeDataToFile('./data/products.json', products);
+        resolve();
+    })
+}
+
 module.exports = {
     findAll,
     findById,
     create,
-    update
+    update,
+    remove
 }

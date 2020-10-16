@@ -90,9 +90,25 @@ async function updateProduct(req, res, id) {
     }
 }
 
+// @desc    Delete a Product
+// @route   DELETE /api/products/:id
 async function deleteProduct(req, res, id) {
     try {
-        const deletedProduct = await Product.remove(id);
+        const product = Product.findById(id);
+
+        if (!product) {
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ message: 'Product not found!' }))
+        }
+
+        await Product.remove(id);
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ message: `Product ${id} removed` }));
+    }
+
+    catch (error) {
+        console.log(error);
     }
 }
 
@@ -100,5 +116,6 @@ module.exports = {
     getProducts,
     getProduct,
     createProduct,
-    updateProduct
+    updateProduct,
+    deleteProduct
 }
